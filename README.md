@@ -29,6 +29,14 @@ Services install a fixed tag:
     "@famashines/the-vps-contracts": "github:famashines/the-vps-contracts#v0.1.0"
 
 npm downloads the repo at that tag and runs `prepare`, which builds `dist/`.
+npm 11 asks each project to approve install scripts. After you add or change
+the version, run this in the service and commit the `allowScripts` change in
+`package.json`:
+
+    npm install-scripts approve @famashines/the-vps-contracts
+
+The approval is for the exact commit of the tag, so a new version needs a new
+approval.
 
 To release, change `version` in `package.json` (and the schemas tag, if it
 changed) in a pull request. After the merge, tag the merge commit on `main`
