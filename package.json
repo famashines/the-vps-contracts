@@ -1,6 +1,6 @@
 {
   "name": "@famashines/the-vps-contracts",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "description": "TypeScript types and schema objects for the-vps, made from @famashines/the-vps-schemas",
   "license": "UNLICENSED",
@@ -27,7 +27,7 @@
     "test": "tsc -p test/tsconfig.json"
   },
   "devDependencies": {
-    "@famashines/the-vps-schemas": "github:famashines/the-vps-schemas#v0.2.0",
+    "@famashines/the-vps-schemas": "github:famashines/the-vps-schemas#v0.3.0",
     "json-schema-to-typescript": "16.0.0",
     "typescript": "7.0.2"
   }
