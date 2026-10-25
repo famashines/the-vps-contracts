@@ -10,6 +10,10 @@ import {
   type UpdateClassSectionCommandPayloadV1,
   type UpdateAcademicYearCommandPayloadV1,
   type StudentSectionChangedEventPayloadV1,
+  type MoneyV1,
+  type ReceivePaymentCommandPayloadV1,
+  type FeeChargedEventPayloadV1,
+  SetFeeScheduleCommandPayloadV1Schema,
 } from "../src/index.js";
 
 const payload: RegisterStudentCommandPayloadV1 = {
@@ -67,4 +71,18 @@ const rename: UpdateClassSectionCommandPayloadV1 = { classSectionId: enroll.clas
 
 const year: UpdateAcademicYearCommandPayloadV1 = { academicYearId: section.academicYearId, expectedVersion: 1, name: "2026-27", startsOn: "2026-04-01", endsOn: "2027-03-31" };
 
-export { details, noVersion, move, moved, rename, year, noFather, command, event, required, typo, badGender, incomplete, section, badGrade, enroll };
+const fee: MoneyV1 = { amount: 450000, currency: "PKR" };
+
+// @ts-expect-error only PKR
+const dollars: MoneyV1 = { amount: 450000, currency: "USD" };
+
+const pay: ReceivePaymentCommandPayloadV1 = { accountId: section.academicYearId, amount: fee, method: "cash" };
+
+// @ts-expect-error cash only
+const card: ReceivePaymentCommandPayloadV1 = { ...pay, method: "card" };
+
+const charged: FeeChargedEventPayloadV1 = { chargeId: enroll.studentId, accountId: pay.accountId, kind: "monthly", month: "2026-11", amount: fee, dueOn: "2026-11-10" };
+
+const scheduleRequired: readonly string[] = SetFeeScheduleCommandPayloadV1Schema.required;
+
+export { fee, dollars, pay, card, charged, scheduleRequired, details, noVersion, move, moved, rename, year, noFather, command, event, required, typo, badGender, incomplete, section, badGrade, enroll };
