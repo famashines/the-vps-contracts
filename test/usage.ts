@@ -3,6 +3,8 @@ import {
   type RegisterStudentCommandPayloadV1,
   type StudentRegisteredEventPayloadV1,
   RegisterStudentCommandPayloadV1Schema,
+  type CreateClassSectionCommandPayloadV1,
+  type EnrollStudentCommandPayloadV1,
 } from "../src/index.js";
 
 const payload: RegisterStudentCommandPayloadV1 = {
@@ -36,4 +38,11 @@ const badGender: RegisterStudentCommandPayloadV1 = { ...payload, gender: "other"
 // @ts-expect-error the event needs studentId and admissionNumber
 const incomplete: StudentRegisteredEventPayloadV1 = payload;
 
-export { command, event, required, typo, badGender, incomplete };
+const section: CreateClassSectionCommandPayloadV1 = { academicYearId: "5b1f0e2a-3c4d-4e5f-8a6b-7c8d9e0f1a2b", grade: "class-3", section: "A" };
+
+// @ts-expect-error class-11 is not a grade
+const badGrade: CreateClassSectionCommandPayloadV1 = { ...section, grade: "class-11" };
+
+const enroll: EnrollStudentCommandPayloadV1 = { studentId: "0b8e6f3a-6a2e-4f7e-9a51-2f1d3c4b5a69", classSectionId: "9c8b7a6d-5e4f-4a3b-9c2d-1e0f2a3b4c5d" };
+
+export { command, event, required, typo, badGender, incomplete, section, badGrade, enroll };
