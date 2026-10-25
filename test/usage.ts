@@ -10,6 +10,7 @@ import {
 const payload: RegisterStudentCommandPayloadV1 = {
   firstName: "Ayesha",
   lastName: "Khan",
+  fatherName: "Imran Khan",
   dateOfBirth: "2016-03-14",
   gender: "female",
   guardian: { name: "Imran Khan", relation: "father", phone: "+923001234567" },
@@ -45,4 +46,7 @@ const badGrade: CreateClassSectionCommandPayloadV1 = { ...section, grade: "class
 
 const enroll: EnrollStudentCommandPayloadV1 = { studentId: "0b8e6f3a-6a2e-4f7e-9a51-2f1d3c4b5a69", classSectionId: "9c8b7a6d-5e4f-4a3b-9c2d-1e0f2a3b4c5d" };
 
-export { command, event, required, typo, badGender, incomplete, section, badGrade, enroll };
+// @ts-expect-error the father name is required
+const noFather: RegisterStudentCommandPayloadV1 = { firstName: "A", lastName: "B", dateOfBirth: "2016-03-14", gender: "male", guardian: payload.guardian };
+
+export { noFather, command, event, required, typo, badGender, incomplete, section, badGrade, enroll };
