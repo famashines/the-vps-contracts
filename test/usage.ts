@@ -3,13 +3,13 @@ import {
   type RegisterStudentCommandPayloadV1,
   type StudentRegisteredEventPayloadV1,
   RegisterStudentCommandPayloadV1Schema,
-  type CreateClassSectionCommandPayloadV1,
+  type OpenClassCommandPayloadV1,
   type EnrollStudentCommandPayloadV1,
   type UpdateStudentDetailsCommandPayloadV1,
-  type ChangeStudentSectionCommandPayloadV1,
-  type UpdateClassSectionCommandPayloadV1,
+  type ChangeStudentClassCommandPayloadV1,
+  type CloseClassCommandPayloadV1,
   type UpdateAcademicYearCommandPayloadV1,
-  type StudentSectionChangedEventPayloadV1,
+  type StudentClassChangedEventPayloadV1,
   type MoneyV1,
   type ReceivePaymentCommandPayloadV1,
   type FeeChargedEventPayloadV1,
@@ -48,12 +48,15 @@ const badGender: RegisterStudentCommandPayloadV1 = { ...payload, gender: "other"
 // @ts-expect-error the event needs studentId and admissionNumber
 const incomplete: StudentRegisteredEventPayloadV1 = payload;
 
-const section: CreateClassSectionCommandPayloadV1 = { academicYearId: "5b1f0e2a-3c4d-4e5f-8a6b-7c8d9e0f1a2b", grade: "class-3", section: "A" };
+const section: OpenClassCommandPayloadV1 = { academicYearId: "5b1f0e2a-3c4d-4e5f-8a6b-7c8d9e0f1a2b", grade: "kg-1" };
 
-// @ts-expect-error class-11 is not a grade
-const badGrade: CreateClassSectionCommandPayloadV1 = { ...section, grade: "class-11" };
+// @ts-expect-error nursery is not a grade
+const badGrade: OpenClassCommandPayloadV1 = { ...section, grade: "nursery" };
 
-const enroll: EnrollStudentCommandPayloadV1 = { studentId: "0b8e6f3a-6a2e-4f7e-9a51-2f1d3c4b5a69", classSectionId: "9c8b7a6d-5e4f-4a3b-9c2d-1e0f2a3b4c5d" };
+// @ts-expect-error a class has no section
+const withSection: OpenClassCommandPayloadV1 = { ...section, section: "A" };
+
+const enroll: EnrollStudentCommandPayloadV1 = { studentId: "0b8e6f3a-6a2e-4f7e-9a51-2f1d3c4b5a69", classId: "9c8b7a6d-5e4f-4a3b-9c2d-1e0f2a3b4c5d" };
 
 // @ts-expect-error the father name is required
 const noFather: RegisterStudentCommandPayloadV1 = { firstName: "A", lastName: "B", dateOfBirth: "2016-03-14", gender: "male", guardian: payload.guardian };
@@ -63,11 +66,11 @@ const details: UpdateStudentDetailsCommandPayloadV1 = { ...payload, studentId: e
 // @ts-expect-error the edit needs expectedVersion
 const noVersion: UpdateStudentDetailsCommandPayloadV1 = { ...payload, studentId: event.studentId };
 
-const move: ChangeStudentSectionCommandPayloadV1 = { enrollmentId: "7d6c5b4a-3e2f-4a1b-8c9d-0e1f2a3b4c5d", expectedVersion: 1, classSectionId: enroll.classSectionId };
+const move: ChangeStudentClassCommandPayloadV1 = { enrollmentId: "7d6c5b4a-3e2f-4a1b-8c9d-0e1f2a3b4c5d", expectedVersion: 1, classId: enroll.classId };
 
-const moved: StudentSectionChangedEventPayloadV1 = { ...move, studentId: event.studentId, academicYearId: section.academicYearId, previousClassSectionId: enroll.classSectionId };
+const moved: StudentClassChangedEventPayloadV1 = { ...move, studentId: event.studentId, academicYearId: section.academicYearId, previousClassId: enroll.classId };
 
-const rename: UpdateClassSectionCommandPayloadV1 = { classSectionId: enroll.classSectionId, expectedVersion: 2, grade: "class-3", section: "Blue" };
+const rename: CloseClassCommandPayloadV1 = { classId: enroll.classId, expectedVersion: 2 };
 
 const year: UpdateAcademicYearCommandPayloadV1 = { academicYearId: section.academicYearId, expectedVersion: 1, name: "2026-27", startsOn: "2026-04-01", endsOn: "2027-03-31" };
 
@@ -85,4 +88,4 @@ const charged: FeeChargedEventPayloadV1 = { chargeId: enroll.studentId, accountI
 
 const scheduleRequired: readonly string[] = SetFeeScheduleCommandPayloadV1Schema.required;
 
-export { fee, dollars, pay, card, charged, scheduleRequired, details, noVersion, move, moved, rename, year, noFather, command, event, required, typo, badGender, incomplete, section, badGrade, enroll };
+export { fee, dollars, pay, card, charged, scheduleRequired, details, noVersion, move, moved, rename, year, noFather, command, event, required, typo, badGender, incomplete, section, badGrade, withSection, enroll };
