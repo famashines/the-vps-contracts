@@ -14,6 +14,10 @@ import {
   type ReceivePaymentCommandPayloadV1,
   type FeeChargedEventPayloadV1,
   SetFeeScheduleCommandPayloadV1Schema,
+  type MarkStudentLeftCommandPayloadV1,
+  type StudentLeftEventPayloadV1,
+  type CancelStudentLeavingCommandPayloadV1,
+  type StudentLeavingCancelledEventPayloadV1,
 } from "../src/index.js";
 
 const payload: RegisterStudentCommandPayloadV1 = {
@@ -88,4 +92,15 @@ const charged: FeeChargedEventPayloadV1 = { chargeId: enroll.studentId, accountI
 
 const scheduleRequired: readonly string[] = SetFeeScheduleCommandPayloadV1Schema.required;
 
-export { fee, dollars, pay, card, charged, scheduleRequired, details, noVersion, move, moved, rename, year, noFather, command, event, required, typo, badGender, incomplete, section, badGrade, withSection, enroll };
+const leave: MarkStudentLeftCommandPayloadV1 = { studentId: event.studentId, expectedVersion: 2, leftOn: "2026-09-15", reason: "Family moved to Lahore" };
+
+// @ts-expect-error the leave needs leftOn
+const noLeftOn: MarkStudentLeftCommandPayloadV1 = { studentId: event.studentId, expectedVersion: 2 };
+
+const left: StudentLeftEventPayloadV1 = { studentId: event.studentId, leftOn: leave.leftOn };
+
+const cancelLeave: CancelStudentLeavingCommandPayloadV1 = { studentId: event.studentId, expectedVersion: 3 };
+
+const leaveCancelled: StudentLeavingCancelledEventPayloadV1 = { studentId: event.studentId, leftOn: leave.leftOn };
+
+export { leave, noLeftOn, left, cancelLeave, leaveCancelled, fee, dollars, pay, card, charged, scheduleRequired, details, noVersion, move, moved, rename, year, noFather, command, event, required, typo, badGender, incomplete, section, badGrade, withSection, enroll };
