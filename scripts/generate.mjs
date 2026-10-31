@@ -15,7 +15,7 @@ for (const dir of files) {
   for (const file of readdirSync(join(root, dir), { recursive: true }).filter((f) => f.endsWith(".json")).sort()) {
     const name = basename(file, ".json");
     const schema = JSON.parse(readFileSync(join(root, dir, file), "utf8"));
-    const type = await compile(structuredClone(schema), name, { bannerComment: "", additionalProperties: false });
+    const type = await compile(structuredClone(schema), name, { bannerComment: "", additionalProperties: false, maxItems: -1 });
     writeFileSync(join(out, `${name}.ts`), `${type}\nexport const ${name}Schema = ${JSON.stringify(schema, null, 2)} as const;\n`);
     names.push(name);
   }
