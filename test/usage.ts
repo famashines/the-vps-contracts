@@ -26,7 +26,12 @@ const payload: RegisterStudentCommandPayloadV1 = {
   fatherName: "Imran Khan",
   dateOfBirth: "2016-03-14",
   gender: "female",
-  guardian: { name: "Imran Khan", relation: "father", phone: "+923001234567" },
+  guardian: { name: "Imran Khan", relation: "father", phone: "+923001234567", cnic: "35202-7654321-9" },
+  bFormNumber: "35202-1234567-8",
+  address: "House 12, Street 4, Gulberg III, Lahore",
+  familyStatus: "father-deceased",
+  familyStatusNote: "The uncle pays the fees.",
+  siblings: { count: 2, studentIds: ["0b9f6c1e-6a4e-4c3e-9a51-2f0f0e3b7d11"] },
 };
 
 const command: CommandEnvelopeV1 = {
@@ -48,6 +53,23 @@ const typo: RegisterStudentCommandPayloadV1 = { ...payload, dateofbirth: "2016-0
 
 // @ts-expect-error gender is only female or male
 const badGender: RegisterStudentCommandPayloadV1 = { ...payload, gender: "other" };
+
+const oldEvent: StudentRegisteredEventPayloadV1 = {
+  studentId: event.studentId,
+  admissionNumber: "2025-0001",
+  firstName: "Ali",
+  lastName: "Raza",
+  fatherName: "Raza Ahmed",
+  dateOfBirth: "2015-01-02",
+  gender: "male",
+  guardian: { name: "Raza Ahmed", relation: "father", phone: "+923001234568" },
+};
+
+// @ts-expect-error the registration needs the address
+const noAddress: RegisterStudentCommandPayloadV1 = { ...payload, address: undefined };
+
+// @ts-expect-error orphan is not a family status
+const badStatus: RegisterStudentCommandPayloadV1 = { ...payload, familyStatus: "orphan" };
 
 // @ts-expect-error the event needs studentId and admissionNumber
 const incomplete: StudentRegisteredEventPayloadV1 = payload;
