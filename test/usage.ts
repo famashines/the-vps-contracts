@@ -68,6 +68,13 @@ const oldEvent: StudentRegisteredEventPayloadV1 = {
 const linked: string[] = ["0b9f6c1e-6a4e-4c3e-9a51-2f0f0e3b7d11"];
 const withLinks: RegisterStudentCommandPayloadV1 = { ...payload, siblings: { count: 1, studentIds: linked } };
 
+const withPreviousSchool: RegisterStudentCommandPayloadV1 = {
+  ...payload,
+  previousSchoolName: "Allied School, Gulberg",
+  previousClass: "Class 3",
+  guardian: { ...payload.guardian, phone2: "+923211234567" },
+};
+
 // @ts-expect-error the registration needs the address
 const noAddress: RegisterStudentCommandPayloadV1 = { ...payload, address: undefined };
 
